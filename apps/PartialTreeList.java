@@ -79,9 +79,25 @@ public class PartialTreeList implements Iterable<PartialTree> {
     public PartialTree remove() 
     throws NoSuchElementException {
     		
-    		/* COMPLETE THIS METHOD */
+    	/* COMPLETE THIS METHOD */
+    	if(size <= 0){
+    		throw new NoSuchElementException("Empty");
+    	}
     	
-    		return null;
+    	else if(size == 1){
+    		PartialTree temp = rear.tree;
+    		rear = null;
+    		return temp;
+    	}
+    	
+    	else{
+    		Node front = rear.next;
+    		rear.next = front.next;
+    		size--;
+    		return front.tree;
+    	}
+    	
+    	
     }
 
     /**
@@ -93,10 +109,69 @@ public class PartialTreeList implements Iterable<PartialTree> {
      */
     public PartialTree removeTreeContaining(Vertex vertex) 
     throws NoSuchElementException {
-    		/* COMPLETE THIS METHOD */
+    	/* COMPLETE THIS METHOD */
+    	System.out.println("removeTreeContaining");
+    	System.out.println(vertex);
     	
+    	PartialTree removed = null;
+    		
+    	if(rear == null){
+    		throw new NoSuchElementException();
+    	}
+    	
+    	Node ptr = rear;
+    	
+    	do{
+    		if(vertexInTree(ptr.tree,vertex)){
+    			removed = ptr.tree;
+    			removeNode(ptr);
+    			break;
+    		}
+    		ptr = ptr.next;
+    		
+    	}while(ptr!=rear);
+    	
+    	if(removed == null){
     		return null;
-     }
+    	}
+    	
+    	
+    	return removed;
+    }
+    
+    
+    private boolean vertexInTree(PartialTree tree, Vertex vertex){
+    	Vertex ptr = vertex;
+    	
+    	while(ptr.parent != ptr){
+    		ptr = ptr.parent;
+    	}
+    	
+    	if(ptr == tree.getRoot()){
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
+    private void removeNode(Node node){
+    	
+    	if(node.next == node || node == null){
+    		node = null;
+    		return;
+    	}
+    	
+    	Node target = node;
+    	
+    	Node ptr = node.next;
+    	
+    	while(!(ptr.next == target)){
+    		ptr = ptr.next;
+    	}
+    	
+    	ptr.next = target.next;
+    	
+    }
     
     /**
      * Gives the number of trees in this list
@@ -149,5 +224,4 @@ public class PartialTreeList implements Iterable<PartialTree> {
     	
     }
 }
-
 
